@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+        const alumno1 = {
+            nombre: "Javier",
+            apellidos:"Ruiz"
+        }
+        const alumno2 = {
+            nombre: "Luis",
+            apellidos:"Pepe"
+        }
+
+        const alumnos = {
+            alumno1,
+            alumno23
+        }
+
+        // localStorage.setItem("centro","Medac")
+        //localStorage.setItem("numero","15")
+        
+        const alumnosString = JSON.stringify(alumnos)
+        localStorage.setItem("alumnos",alumnosString)
+
+        // console.log(localStorage.getItem("centro"))
+
+        const alu = localStorage.getItem("alumno")
+        const aluArray = JSON.parse(alu)
+        console.log(aluArray)
+
+        const alumno3 = {
+            nombre: "Jose",
+            apellidos:"Maria"
+        }  
+
+        aluArray.push(alumno3)
+        console.log(aluArray)
+
+        localStorage.setItem("alumnos", JSON.stringify(aluArray))
+    </script>
+</body>
+</html>
+

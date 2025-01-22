@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica 9</title>
+    <style>
+        /* Estilo global */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+
+    /* Título principal */
+    h1 {
+        text-align: center;
+        color: #333;
+        padding-top: 20px;
+    }
+
+    /* Contenedor de las tareas */
+    #lista-tareas {
+        width: 80%;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Tarea individual */
+    #lista-tareas div {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    #lista-tareas ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    #lista-tareas li, #lista-tareas p {
+        margin: 5px 0;
+    }
+
+    #lista-tareas p {
+        color: #555;
+    }
+
+    /* Formulario */
+    #contenedorFormulario {
+        width: 80%;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    form h3 {
+        margin: 10px 0;
+        color: #333;
+    }
+
+    form input {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+
+    form button {
+        width: 20%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    form button:hover {
+        background-color: #45a049;
+    }
+
+    /* Botones */
+    button {
+        padding-left:30px;
+        padding: 10px 20px;
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-left: 10%;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    button:disabled {
+        background-color: #ccc;
+    }
+
+    </style>
+</head>
+<body>
+
+<h1>Lista de tareas</h1>
+<div id="lista-tareas"></div>
+<button id="botonAñadirTarea">Añadir tarea</button>
+<button id="botonEliminarTarea">Eliminar tarea</button>
+<button>Modificar tarea</button>
+<button>Ver tareas pendientes</button>
+<button>Ver tareas completadas</button>
+<div id="contenedorFormulario"></div>
+
+
+
+<script>
+    const tarea1 = {
+        id: "1",
+        titulo: "Hacer la compra",
+        descripcion: "Realizar la compra semanal en el super",
+        completada: false
+    }
+
+    const tarea2 = {
+        id: "2",
+        titulo: "Comprar regalo",
+        descripcion: "Comprar un regalo para el miércoles",
+        completada: false
+    }
+
+    const tareasArr = [tarea1,tarea2]
+
+    const tareasString= JSON.stringify(tareasArr)
+    localStorage.setItem("tareas",tareasString)
+
+    const tareasJSON = localStorage.getItem("tareas")
+    const tareas = JSON.parse(tareasJSON)
+
+
+
+    // MOSTRAR LISTA
+    function mostrarLista(arr){
+        const contenedor = document.getElementById("lista-tareas")
+        contenedor.innerHTML=""
+        arr.forEach(tarea => {
+        contenedor.innerHTML +=`
+            <div id=divTarea${tarea.id}>
+                <ul>
+                    <li>ID: ${tarea.id}</li>
+                    <p>Título: ${tarea.titulo}</p>
+                    <p>Descripción: ${tarea.descripcion}</p>
+                    <p>Completado: ${tarea.completada}</p>
+                    <button id=tareaCompletada>Tarea completada</button>
+                </ul>
+            </div>
+        `
+        });
+    }
+    
+    mostrarLista(tareas)
+
+    
+    function completarTarea(){
+        const botonCompletarTarea = documnet.getElementById("tareaCompletada")
+        botonCompletarTarea.addEventListener("click", function(){
+
+        })
+    }
+
+
+    // AÑADIR TAREA
+    const botonAñadirTarea = document.getElementById("botonAñadirTarea")
+    const divFormulario = document.getElementById("contenedorFormulario")
+    botonAñadirTarea.addEventListener("click", function() {
+        // crear formulario
+        const formulario = document.createElement("form")
+        formulario.setAttribute("id","añadirTarea")
+
+        //ahora crear los diferentes inputs y luego se usa appendchild para meterlos en el formulario
+        const idH3=document.createElement("h3")
+        idH3.textContent="ID"
+        formulario.appendChild(idH3)
+        const inputId = document.createElement("input")
+        inputId.setAttribute("type","text")
+        inputId.setAttribute("id","nuevoId")
+        formulario.appendChild(inputId)
+
+        const tituloH3=document.createElement("h3")
+        tituloH3.textContent="TITULO"
+        formulario.appendChild(tituloH3)
+        const inputTitulo = document.createElement("input")
+        inputTitulo.setAttribute("type","text")
+        inputTitulo.setAttribute("id","nuevoTitulo")
+        formulario.appendChild(inputTitulo)
+
+        const descripcionH3=document.createElement("h3")
+        descripcionH3.textContent="DESCRIPCION"
+        formulario.appendChild(descripcionH3)
+        const inputDescripcion = document.createElement("input")
+        inputDescripcion.setAttribute("type","text")
+        inputDescripcion.setAttribute("id","nuevoDescripcion")
+        formulario.appendChild(inputDescripcion)
+
+        const botonGuardar = document.createElement("button")
+        botonGuardar.textContent="Guardar"
+        formulario.appendChild(botonGuardar)
+
+        const botonCancelar = document.createElement("button")
+        botonCancelar.textContent="Cancelar"
+        formulario.appendChild(botonCancelar)
+
+        //luego se usa appendChild para meter el formulario en el div
+        divFormulario.appendChild(formulario)
+
+        botonAñadirTarea.disabled=true
+        botonEliminarTarea.disabled=true
+
+        //funcion del boton cancelar
+        botonCancelar.addEventListener("click",function(){
+            formulario.remove();
+            botonAñadirTarea.disabled=false
+            botonEliminarTarea.disabled=false
+        })
+        // funcion del boton guardar
+        botonGuardar.addEventListener("click", function(e){
+            e.preventDefault();
+
+            const valorNuevoId = document.getElementById("nuevoId").value
+            const valorNuevoTitulo = document.getElementById("nuevoTitulo").value
+            const valorNuevoDescripcion = document.getElementById("nuevoDescripcion").value
+
+            let contador=0
+            const nuevaTarea = {
+                id: valorNuevoId,
+                titulo: valorNuevoTitulo,
+                descripcion: valorNuevoDescripcion,
+                completada: false
+            }
+            tareasArr.push(nuevaTarea)
+            localStorage.setItem("tareas", JSON.stringify(tareasArr))
+            const nuevaListaTareas = JSON.parse(localStorage.getItem("tareas"))
+            mostrarLista(nuevaListaTareas)
+            formulario.remove()
+            botonAñadirTarea.disabled=false
+            botonEliminarTarea.disabled=false  
+        })
+    })
+
+
+
+
+    // ELIMINAR TAREA
+    const botonEliminarTarea = document.getElementById("botonEliminarTarea")
+    botonEliminarTarea.addEventListener("click", function() {
+        // crear formulario
+        const formulario = document.createElement("form")
+        formulario.setAttribute("id","añadirTarea")
+
+        //ahora crear los diferentes inputs y luego se usa appendchild para meterlos en el formulario
+        const idH3=document.createElement("h3")
+        idH3.textContent="ID"
+        formulario.appendChild(idH3)
+        const inputId = document.createElement("input")
+        inputId.setAttribute("type","text")
+        inputId.setAttribute("id","idBorrar")
+        formulario.appendChild(inputId)
+
+        const botonEliminar = document.createElement("button")
+        botonEliminar.textContent="Eliminar"
+        formulario.appendChild(botonEliminar)
+
+        const botonCancelar = document.createElement("button")
+        botonCancelar.textContent="Cancelar"
+        formulario.appendChild(botonCancelar)
+
+        //luego se usa appendChild para meter el formulario en el div
+        divFormulario.appendChild(formulario)
+
+        botonAñadirTarea.disabled=true
+        botonEliminarTarea.disabled=true
+
+        //funcion del boton cancelar
+        botonCancelar.addEventListener("click",function(){
+            formulario.remove();
+            botonAñadirTarea.disabled=false;
+            botonEliminarTarea.disabled=false;
+
+        })
+        // funcion del boton eliminar
+        botonEliminar.addEventListener("click", function(e){
+            e.preventDefault();
+
+            const idBorrar = document.getElementById("idBorrar").value
+
+            tareasArr.forEach(tarea => {
+                if(tarea.id==idBorrar){
+                    const posicion = tareasArr.indexOf(tarea)
+                    tareasArr.splice(posicion, 1)
+                }
+            });
+            localStorage.setItem("tareas", JSON.stringify(tareasArr))
+            const nuevaListaTareas = JSON.parse(localStorage.getItem("tareas"))
+            mostrarLista(nuevaListaTareas)
+            formulario.remove()
+            botonAñadirTarea.disabled=false;
+            botonEliminarTarea.disabled=false;
+
+        })
+    })
+
+
+    // MODIFICAR TAREA
+    const botonModificarTarea = document.getElementById("botonModificarTarea")
+
+</script>
+
+</body>
+</html>
