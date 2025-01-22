@@ -168,7 +168,7 @@
     mostrarLista(tareas)
 
     function completarTarea(){
-        const botonCompletarTarea = document.getElementById("tareaCompletada${tarea.id}")
+        const botonCompletarTarea = document.getElementById(`tareaCompletada${tarea.id}`)
         botonCompletarTarea.addEventListener("click", function(){
             tareasArr.forEach(tarea => {
                 if(!tarea.completada){
