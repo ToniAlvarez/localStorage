@@ -1,0 +1,73 @@
+<script>
+    const botonModificarRegistro = document.getElementById("botonModificarRegistro");
+
+    botonModificarRegistro.addEventListener("click", function () {
+        // Crear formulario
+        const formulario = document.createElement("form");
+        formulario.setAttribute("id", "modificarRegistro");
+
+        // ID input
+        const idH3 = document.createElement("h3");
+        idH3.textContent = "ID";
+        formulario.appendChild(idH3);
+
+        const inputId = document.createElement("input");
+        inputId.setAttribute("type", "text");
+        inputId.setAttribute("id", "idModificar");
+        formulario.appendChild(inputId);
+
+        // Temperatura input
+        const temperaturaH3 = document.createElement("h3");
+        temperaturaH3.textContent = "Nueva Temperatura";
+        formulario.appendChild(temperaturaH3);
+
+        const inputTemperatura = document.createElement("input");
+        inputTemperatura.setAttribute("type", "text");
+        inputTemperatura.setAttribute("id", "nuevaTemperatura");
+        formulario.appendChild(inputTemperatura);
+
+        // Botones
+        const botonModificar = document.createElement("button");
+        botonModificar.textContent = "Modificar";
+        formulario.appendChild(botonModificar);
+
+        const botonCancelar = document.createElement("button");
+        botonCancelar.textContent = "Cancelar";
+        formulario.appendChild(botonCancelar);
+
+        // Insertar formulario
+        divFormulario.appendChild(formulario);
+        botonAñadirRegistro.disabled = true;
+        botonEliminarRegistro.disabled = true;
+
+        // Cancelar modificación
+        botonCancelar.addEventListener("click", function (e) {
+            e.preventDefault();
+            formulario.remove();
+            botonAñadirRegistro.disabled = false;
+            botonEliminarRegistro.disabled = false;
+        });
+
+        // Modificar registro
+        botonModificar.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            const idModificar = document.getElementById("idModificar").value;
+            const nuevaTemperatura = document.getElementById("nuevaTemperatura").value;
+
+            // Validar si existe el registro
+            const registro = registrosArr.find((reg) => reg.id === idModificar);
+            if (registro) {
+                registro.temperatura = nuevaTemperatura; // Modificar temperatura
+                localStorage.setItem("registros", JSON.stringify(registrosArr)); // Guardar cambios
+                mostrarLista(registrosArr); // Actualizar vista
+            } else {
+                alert("Registro no encontrado");
+            }
+
+            formulario.remove();
+            botonAñadirRegistro.disabled = false;
+            botonEliminarRegistro.disabled = false;
+        });
+    });
+</script>

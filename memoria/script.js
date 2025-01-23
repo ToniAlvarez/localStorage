@@ -61,10 +61,6 @@ imagenes.forEach(imagen => {
         // si se han descubierto 2 cartas
         if (evaluar.length === 2) {
 
-
-
-
-            
             // Bloquear nuevos clics mientras se comparan las cartas
             bloqueado = true;
 

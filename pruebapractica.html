@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <div id="lista-registros"></div>
+    <button id="botonAñadirRegistro">Añadir registro</button>
+    <button id="botonEliminarRegistro">Eliminar registro</button>
+    <button id="botonModificarRegistro">Modificar registro</button>
+    <button id="botonMostrarRegistro">Mostrar Registro</button>
+    <div id="contenedorFormulario"></div>
+    <div id="contenedorLista"></div>
+
+
+
+    <script>
+    const registro1 = {
+        id: "1",
+        ciudad: "Córdoba",
+        dia: "2024-01-21",
+        hora: "13:00:00",
+        temperatura: "18.5"
+    }
+    const registro2 = {
+        id: "2",
+        ciudad: "Córdoba",
+        dia: "2024-01-21",
+        hora: "14:00:00",
+        temperatura: "20.8"
+    }
+
+    const registrosArr = [registro1,registro2]
+    if(localStorage.length===0){
+        localStorage.setItem("registros",JSON.stringify(registrosArr))
+    }
+    
+    const registrosString = localStorage.getItem("registros")
+    const registros = JSON.parse(registrosString)
+
+    function mostrarLista(arr){
+        const contenedor = document.getElementById("lista-registros")
+        contenedor.innerHTML=""
+        arr.forEach(reg => {
+        contenedor.innerHTML +=`
+            <div id=divRegistro${reg.id}>
+                <ul>
+                    <li>ID: ${reg.id}</li>
+                    <p>Ciudad: ${reg.ciudad}</p>
+                    <p>Día: ${reg.dia}</p>
+                    <p>Hora: ${reg.hora}</p>
+                    <p>Temperatura: ${reg.temperatura}</p>
+
+                </ul>
+            </div>
+        `
+        });
+    }
+    mostrarLista(registros)
+
+    // AÑADIR registro
+    const botonAñadirRegistro = document.getElementById("botonAñadirRegistro")
+    const divFormulario = document.getElementById("contenedorFormulario")
+    botonAñadirRegistro.addEventListener("click", function() {
+        // crear formulario
+        const formulario = document.createElement("form")
+        formulario.setAttribute("id","añadirRegistro")
+
+        //ahora crear los diferentes inputs y luego se usa appendchild para meterlos en el formulario
+        const idH3=document.createElement("h3")
+        idH3.textContent="ID"
+        formulario.appendChild(idH3)
+        const inputId = document.createElement("input")
+        inputId.setAttribute("type","text")
+        inputId.setAttribute("id","nuevoId")
+        formulario.appendChild(inputId)
+
+        const ciudadH3=document.createElement("h3")
+        ciudadH3.textContent="Ciudad"
+        formulario.appendChild(ciudadH3)
+        const inputCiudad = document.createElement("input")
+        inputCiudad.setAttribute("type","text")
+        inputCiudad.setAttribute("id","nuevaCiudad")
+        formulario.appendChild(inputCiudad)
+
+        const diaH3=document.createElement("h3")
+        diaH3.textContent="Día"
+        formulario.appendChild(diaH3)
+        const inputDia = document.createElement("input")
+        inputDia.setAttribute("type","text")
+        inputDia.setAttribute("id","nuevoDia")
+        formulario.appendChild(inputDia)
+
+        const horaH3=document.createElement("h3")
+        horaH3.textContent="Hora"
+        formulario.appendChild(horaH3)
+        const inputHora = document.createElement("input")
+        inputHora.setAttribute("type","text")
+        inputHora.setAttribute("id","nuevaHora")
+        formulario.appendChild(inputHora)
+
+        const temperaturaH3=document.createElement("h3")
+        temperaturaH3.textContent="Temperatura"
+        formulario.appendChild(temperaturaH3)
+        const inputTemperatura = document.createElement("input")
+        inputTemperatura.setAttribute("type","text")
+        inputTemperatura.setAttribute("id","nuevaTemperatura")
+        formulario.appendChild(inputTemperatura)
+
+        const botonGuardar = document.createElement("button")
+        botonGuardar.textContent="Guardar"
+        formulario.appendChild(botonGuardar)
+
+        const botonCancelar = document.createElement("button")
+        botonCancelar.textContent="Cancelar"
+        formulario.appendChild(botonCancelar)
+
+        //luego se usa appendChild para meter el formulario en el div
+        divFormulario.appendChild(formulario)
+
+        botonAñadirRegistro.disabled=true
+        botonEliminarRegistro.disabled=true
+        botonModificarRegistro.disabled=true
+        botonMostrarRegistro.disabled=true
+
+        //funcion del boton cancelar
+        botonCancelar.addEventListener("click",function(){
+            formulario.remove();
+            botonAñadirRegistro.disabled=false
+            botonEliminarRegistro.disabled=false
+            botonModificarRegistro.disabled=false
+            botonMostrarRegistro.disabled=false
+        })
+        // funcion del boton guardar
+        botonGuardar.addEventListener("click", function(e){
+            e.preventDefault();
+
+            const valorNuevoId = document.getElementById("nuevoId").value
+            const valorNuevaCiudad = document.getElementById("nuevaCiudad").value
+            const valorNuevoDia = document.getElementById("nuevoDia").value
+            const valorNuevaHora = document.getElementById("nuevaHora").value
+            const valorNuevaTemperatura = document.getElementById("nuevaTemperatura").value
+
+            const nuevoRegistro = {
+                id: valorNuevoId,
+                ciudad: valorNuevaCiudad,
+                dia: valorNuevoDia,
+                hora: valorNuevaHora,
+                temperatura:valorNuevaTemperatura
+            }
+
+            registrosArr.push(nuevoRegistro)
+
+            localStorage.setItem("registros", JSON.stringify(registrosArr))
+            const nuevaListaRegistros = JSON.parse(localStorage.getItem("registros"))
+            mostrarLista(nuevaListaRegistros)
+            formulario.remove()
+            botonAñadirRegistro.disabled=false
+            botonEliminarRegistro.disabled=false
+            botonModificarRegistro.disabled=false
+            botonMostrarRegistro.disabled=false
+        })
+    })
+
+    // ELIMINAR registro
+    const botonEliminarRegistro = document.getElementById("botonEliminarRegistro")
+    botonEliminarRegistro.addEventListener("click", function() {
+        // crear formulario
+        const formulario = document.createElement("form")
+        formulario.setAttribute("id","eliminarRegistro")
+
+        //ahora crear los diferentes inputs y luego se usa appendchild para meterlos en el formulario
+        const idH3=document.createElement("h3")
+        idH3.textContent="ID"
+        formulario.appendChild(idH3)
+        const inputId = document.createElement("input")
+        inputId.setAttribute("type","text")
+        inputId.setAttribute("id","idBorrar")
+        formulario.appendChild(inputId)
+
+        const botonEliminar = document.createElement("button")
+        botonEliminar.textContent="Eliminar"
+        formulario.appendChild(botonEliminar)
+
+        const botonCancelar = document.createElement("button")
+        botonCancelar.textContent="Cancelar"
+        formulario.appendChild(botonCancelar)
+
+        //luego se usa appendChild para meter el formulario en el div
+        divFormulario.appendChild(formulario)
+
+        botonAñadirRegistro.disabled=true
+        botonEliminarRegistro.disabled=true
+        botonModificarRegistro.disabled=true
+        botonMostrarRegistro.disabled=true
+
+        //funcion del boton cancelar
+        botonCancelar.addEventListener("click",function(){
+            formulario.remove();
+            botonAñadirRegistro.disabled=false;
+            botonEliminarRegistro.disabled=false;
+            botonModificarRegistro.disabled=false
+            botonMostrarRegistro.disabled=false
+
+        })
+        // funcion del boton eliminar
+        botonEliminar.addEventListener("click", function(e){
+            e.preventDefault();
+
+            const idBorrar = document.getElementById("idBorrar").value
+
+            registrosArr.forEach(reg => {
+                if(reg.id==idBorrar){
+                    const posicion = registrosArr.indexOf(reg)
+                    registrosArr.splice(posicion, 1)
+                }
+            });
+            localStorage.setItem("registros", JSON.stringify(registrosArr))
+            const nuevaListaRegistros = JSON.parse(localStorage.getItem("registros"))
+            mostrarLista(nuevaListaRegistros)
+            formulario.remove()
+            botonAñadirRegistro.disabled=false;
+            botonEliminarRegistro.disabled=false;
+            botonModificarRegistro.disabled=false
+            botonMostrarRegistro.disabled=false
+        })
+    })
+
+
+    // MODIFICAR registro
+    const botonModificarRegistro = document.getElementById("botonModificarRegistro")
+    botonModificarRegistro.addEventListener("click", function () {
+        // Crear formulario
+        const formulario = document.createElement("form");
+        formulario.setAttribute("id", "modificarRegistro");
+
+        const idH3 = document.createElement("h3");
+        idH3.textContent = "ID";
+        formulario.appendChild(idH3);
+        const inputId = document.createElement("input");
+        inputId.setAttribute("type", "text");
+        inputId.setAttribute("id", "idModificar");
+        formulario.appendChild(inputId);
+
+        const temperaturaH3 = document.createElement("h3");
+        temperaturaH3.textContent = "Nueva Temperatura";
+        formulario.appendChild(temperaturaH3);
+        const inputTemperatura = document.createElement("input");
+        inputTemperatura.setAttribute("type", "text");
+        inputTemperatura.setAttribute("id", "nuevaTemperatura");
+        formulario.appendChild(inputTemperatura);
+
+        const botonModificar = document.createElement("button");
+        botonModificar.textContent = "Modificar";
+        formulario.appendChild(botonModificar);
+
+        const botonCancelar = document.createElement("button");
+        botonCancelar.textContent = "Cancelar";
+        formulario.appendChild(botonCancelar);
+
+        divFormulario.appendChild(formulario);
+        botonAñadirRegistro.disabled = true;
+        botonEliminarRegistro.disabled = true;
+        botonModificarRegistro.disabled= true;
+        botonMostrarRegistro.disabled = true;
+
+        botonCancelar.addEventListener("click", function (e) {
+            e.preventDefault();
+            formulario.remove();
+            botonAñadirRegistro.disabled = false;
+            botonEliminarRegistro.disabled = false;
+            botonModificarRegistro.disabled= false;
+            botonMostrarRegistro.disabled=false
+        });
+
+        botonModificar.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            const idModificar = document.getElementById("idModificar").value;
+            const nuevaTemperatura = document.getElementById("nuevaTemperatura").value;
+
+            const registro = registrosArr.find((reg) => reg.id === idModificar);
+            if (registro) {
+                registro.temperatura = nuevaTemperatura; 
+                localStorage.setItem("registros", JSON.stringify(registrosArr)); 
+                mostrarLista(registrosArr); 
+            } 
+
+            formulario.remove();
+            botonAñadirRegistro.disabled=false
+            botonEliminarRegistro.disabled=false
+            botonModificarRegistro.disabled=false
+            botonMostrarRegistro.disabled=false
+        });
+    });
+   
+   
+    // MOSTRAR registro
+    const botonMostrarRegistro = document.getElementById("botonMostrarRegistro")
+    const divLista = document.getElementById("contenedorLista")
+
+    botonMostrarRegistro.addEventListener("click", function() {
+
+
+        const lista = document.createElement("ul");
+        lista.setAttribute("id", "mostrarRegistros");
+
+        const tituloH3 = document.createElement("h3");
+        tituloH3.textContent = "Listado de temperaturas";
+        lista.appendChild(tituloH3);
+
+        registrosArr.forEach(reg => {
+            const temperatura = document.createElement("li")
+            temperatura.textContent=reg.temperatura
+            lista.appendChild(temperatura);
+        })
+
+        const botonCancelar = document.createElement("button")
+        botonCancelar.textContent="Cancelar"
+        lista.appendChild(botonCancelar)
+        divLista.appendChild(lista)  
+
+        botonAñadirRegistro.disabled = true;
+        botonEliminarRegistro.disabled = true;
+        botonModificarRegistro.disabled= true;
+        botonMostrarRegistro.disabled = true;
+
+        //funcion del boton cancelar
+        botonCancelar.addEventListener("click",function(){
+        lista.remove();
+        botonAñadirRegistro.disabled=false
+        botonEliminarRegistro.disabled=false
+        botonModificarRegistro.disabled=false
+        botonMostrarRegistro.disabled=false
+
+        })
+    })
+    
+   
+   </script>
+</body>
+</html>
